@@ -1,0 +1,18 @@
+name: probe
+on:
+  push:
+    branches: ['probe/**']
+  workflow_dispatch:
+concurrency:
+  group: probe-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  slow-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: list the probe's notes
+        run: ls -la && cat notes.md 2>/dev/null || true
+      - name: stay active long enough for a move to carry this run
+        run: sleep 240
